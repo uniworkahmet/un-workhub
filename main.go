@@ -7,28 +7,26 @@ import (
 
 const size = 9
 
-
-func solveSudoku(board *[size][size]int) bool {
-	row, col := findEmpty(board)
+func SudokuCöz(board *[size][size]int) bool {
+	row, col := bosBul(board)
 	if row == -1 && col == -1 {
-		return true 
+		return true
 	}
 
 	for num := 1; num <= 9; num++ {
-		if isValid(board, row, col, num) {
+		if gecerli(board, row, col, num) {
 			board[row][col] = num
-			if solveSudoku(board) {
+			if SudokuCöz(board) {
 				return true
 			}
-			board[row][col] = 0 
+			board[row][col] = 0
 		}
 	}
 
 	return false
 }
 
-
-func findEmpty(board *[size][size]int) (int, int) {
+func bosBul(board *[size][size]int) (int, int) {
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
 			if board[i][j] == 0 {
@@ -39,8 +37,7 @@ func findEmpty(board *[size][size]int) (int, int) {
 	return -1, -1
 }
 
-
-func isValid(board *[size][size]int, row, col, num int) bool {
+func gecerli(board *[size][size]int, row, col, num int) bool {
 	for i := 0; i < size; i++ {
 		if board[row][i] == num || board[i][col] == num ||
 			board[row-row%3+i/3][col-col%3+i%3] == num {
@@ -50,8 +47,7 @@ func isValid(board *[size][size]int, row, col, num int) bool {
 	return true
 }
 
-
-func printBoard(board [size][size]int) {
+func SudokuTablosu(board [size][size]int) {
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
 			fmt.Printf("%d ", board[i][j])
@@ -60,11 +56,9 @@ func printBoard(board [size][size]int) {
 	}
 }
 
-
-func parseBoard(args []string) ([size][size]int, error) {
+func Terminal(args []string) ([size][size]int, error) {
 	var board [size][size]int
 
-	
 	for i := 0; i < size; i++ {
 		if len(args[i]) != size {
 			return board, fmt.Errorf("Satır %d, %d uzunluğunda. Her satırın tam olarak %d karakter olması gerekiyor.", i+1, len(args[i]), size)
@@ -85,20 +79,20 @@ func parseBoard(args []string) ([size][size]int, error) {
 
 func main() {
 	if len(os.Args) != 10 {
-		fmt.Println("error")
+		fmt.Println("Error")
 		return
 	}
 
-	args := os.Args[1:] 
-	board, err := parseBoard(args)
+	args := os.Args[1:]
+	board, err := Terminal(args)
 	if err != nil {
 		fmt.Println("Hata:", err)
 		return
 	}
 
-	if solveSudoku(&board) {
-		printBoard(board)
+	if SudokuCöz(&board) {
+		SudokuTablosu(board)
 	} else {
-		fmt.Println("Çözüm bulunamadı!")
+		fmt.Println("Error")
 	}
 }
